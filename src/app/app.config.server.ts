@@ -1,6 +1,4 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { provideRouter } from '@angular/router';
-import { routes } from './app.routes';
 import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideHttpClient, withFetch } from '@angular/common/http';
@@ -19,6 +17,10 @@ import {
 } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { provideServerRendering } from '@angular/platform-server';
+import { serverRoutes } from './app.routes.server';
+import { provideServerRoutesConfig } from '@angular/ssr';
+import { RouterModule } from '@angular/router';
+import { routes } from './app.routes';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -26,7 +28,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 export const appConfigServer: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
+    provideServerRoutesConfig(serverRoutes),
     provideHttpClient(withFetch()),
     provideStore({
       router: routerReducer,
@@ -43,6 +45,7 @@ export const appConfigServer: ApplicationConfig = {
     provideServerRendering(),
 
     importProvidersFrom(
+      RouterModule.forRoot(routes),
       TranslateModule.forRoot({
         defaultLanguage: 'en',
         loader: {
