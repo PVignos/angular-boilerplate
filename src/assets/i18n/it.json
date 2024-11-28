@@ -5,12 +5,16 @@
     "index": {
       "path": "",
       "title": "Pagina iniziale",
-      "description": "Descrizione della pagina iniziale"
+      "description": "Descrizione della pagina iniziale",
+      "keywords": "home, page, description",
+      "image": "path/to/your/image.png"
     },
     "about": {
       "path": "chi-siamo",
       "title": "Chi siamo",
-      "description": "Descrizione chi siamo"
+      "description": "Descrizione chi siamo",
+      "keywords": "home, page, description",
+      "image": "path/to/your/image.png"
     }
   }
 }

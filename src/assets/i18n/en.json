@@ -5,12 +5,16 @@
     "index": {
       "path": "",
       "title": "Home page",
-      "description": "Description home page"
+      "description": "Description home page",
+      "keywords": "home, page, description",
+      "image": "path/to/your/image.png"
     },
     "about": {
       "path": "about-us",
       "title": "About Us",
-      "description": "Description about us"
+      "description": "Description about us",
+      "keywords": "home, page, description",
+      "image": "path/to/your/image.png"
     }
   }
 }
