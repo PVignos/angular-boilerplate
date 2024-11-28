@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { inject } from '@angular/core';
+import { inject, Injector, runInInjectionContext } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 export const routes: Routes = [
@@ -15,23 +15,3 @@ export const routes: Routes = [
       import('./about/about.component').then((x) => x.AboutComponent),
   },
 ];
-
-export function generateRoutes(): Routes {
-  const translate = inject(TranslateService);
-  const translations = translate.instant('pages');
-
-  return [
-    {
-      path: translations['index'].path,
-      loadComponent: () =>
-        import('./home/home.component').then((x) => x.HomeComponent),
-      title: translations['index'].title,
-    },
-    {
-      path: translations['about'].path,
-      loadComponent: () =>
-        import('./about/about.component').then((x) => x.AboutComponent),
-      title: translations['about'].title,
-    },
-  ];
-}

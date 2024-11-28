@@ -1,24 +1,48 @@
-import { mergeApplicationConfig, ApplicationConfig } from '@angular/core';
-import { provideServerRendering } from '@angular/platform-server';
-import { provideServerRoutesConfig } from '@angular/ssr';
-import { appConfig } from './app.config';
-import { serverRoutes } from './app.routes.server';
-import { importProvidersFrom } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { routes } from './app.routes';
+import { provideStore } from '@ngrx/store';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideRouterStore, routerReducer } from '@ngrx/router-store';
+import { uiReducer } from './store/ui-store/ui.reducer';
+import { UiFacade } from './store/ui-store/ui.facade';
+import {
+  provideClientHydration,
+  withI18nSupport,
+} from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
+import {
+  TranslateModule,
+  TranslateLoader,
+  TranslateStore,
+} from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideServerRendering } from '@angular/platform-server';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
-const serverConfig: ApplicationConfig = {
+export const appConfigServer: ApplicationConfig = {
   providers: [
+    provideRouter(routes),
+    provideHttpClient(withFetch()),
+    provideStore({
+      router: routerReducer,
+      ui: uiReducer,
+    }),
+    provideStoreDevtools({
+      trace: false,
+      traceLimit: 75,
+    }),
+    provideRouterStore(),
+    UiFacade,
+    provideClientHydration(withI18nSupport()),
+
     provideServerRendering(),
-    provideServerRoutesConfig(serverRoutes),
+
     importProvidersFrom(
-      HttpClientModule,
       TranslateModule.forRoot({
         defaultLanguage: 'en',
         loader: {
@@ -29,7 +53,6 @@ const serverConfig: ApplicationConfig = {
         useDefaultLang: true,
       })
     ),
+    { provide: TranslateStore, useClass: TranslateStore },
   ],
 };
-
-export const config = mergeApplicationConfig(appConfig, serverConfig);
