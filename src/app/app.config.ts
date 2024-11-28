@@ -16,10 +16,13 @@ import {
   withI18nSupport,
 } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import {
+  TranslateModule,
+  TranslateLoader,
+  TranslateStore,
+} from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-// Factory per il loader delle traduzioni
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -52,5 +55,6 @@ export const appConfig: ApplicationConfig = {
         useDefaultLang: true,
       })
     ),
+    { provide: TranslateStore, useClass: TranslateStore },
   ],
 };
