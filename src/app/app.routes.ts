@@ -22,13 +22,13 @@ export function generateRoutes(): Routes {
 
   return [
     {
-      path: translations['index'].path, // URL da traduzione
+      path: translations['index'].path,
       loadComponent: () =>
         import('./home/home.component').then((x) => x.HomeComponent),
       title: translations['index'].title,
     },
     {
-      path: translations['about'].path, // URL da traduzione
+      path: translations['about'].path,
       loadComponent: () =>
         import('./about/about.component').then((x) => x.AboutComponent),
       title: translations['about'].title,
