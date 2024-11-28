@@ -1,0 +1,16 @@
+{
+  "HELLO": "Ciao",
+  "WORLD": "Mondo",
+  "pages": {
+    "index": {
+      "path": "",
+      "title": "Pagina iniziale",
+      "description": "Descrizione della pagina iniziale"
+    },
+    "about": {
+      "path": "chi-siamo",
+      "title": "Chi siamo",
+      "description": "Descrizione chi siamo"
+    }
+  }
+}

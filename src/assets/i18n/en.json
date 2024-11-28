@@ -1,0 +1,16 @@
+{
+  "HELLO": "Hello",
+  "WORLD": "World",
+  "pages": {
+    "index": {
+      "path": "",
+      "title": "Home page",
+      "description": "Description home page"
+    },
+    "about": {
+      "path": "about-us",
+      "title": "About Us",
+      "description": "Description about us"
+    }
+  }
+}
