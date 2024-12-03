@@ -1,0 +1,78 @@
+<header class="bg-gray-800 text-white shadow-md">
+  <div class="container mx-auto px-4 py-3">
+    <div class="flex items-center justify-between">
+      <!-- Logo -->
+      <a href="/" class="text-2xl font-bold flex items-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 100 50"
+          class="w-16 mr-2 text-white"
+          role="img"
+          aria-label="Logo"
+        >
+          <rect width="100" height="50" rx="8" fill="#4F46E5"></rect>
+          <text
+            x="50%"
+            y="50%"
+            dominant-baseline="middle"
+            text-anchor="middle"
+            font-size="20"
+            fill="white"
+            font-family="Arial, sans-serif"
+          >
+            Logo
+          </text>
+        </svg>
+      </a>
+
+      <!-- Language Switch (in mobile view) -->
+      <app-language-switch class="hidden md:flex" />
+
+      <!-- Hamburger Menu (mobile) -->
+      <button
+        class="md:hidden text-white focus:outline-none"
+        (click)="toggleMobileMenu()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M4 6h16M4 12h16m-7 6h7"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation Links (hidden by default) -->
+    <nav
+      [class.open]="isMobileMenuOpen"
+      [class.hidden]="!isMobileMenuOpen"
+      class="fixed inset-0 bg-gray-800 bg-opacity-90 z-50 flex items-center justify-center overflow-y-auto"
+    >
+      <ul
+        class="flex flex-col md:flex-row items-center md:space-x-4 space-y-4 md:space-y-0 p-4"
+      >
+        <li>
+          <a
+            routerLink="/about"
+            routerLinkActive="active"
+            class="block text-gray-300 hover:text-gray-100 transition"
+          >
+            {{ 'pages.about.title' | translate }}
+          </a>
+        </li>
+        <li class="flex md:hidden">
+          <app-language-switch class="flex" />
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>

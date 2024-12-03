@@ -52,7 +52,6 @@ export const appConfig: ApplicationConfig = {
           useFactory: HttpLoaderFactory,
           deps: [HttpClient],
         },
-        useDefaultLang: true,
       })
     ),
     { provide: TranslateStore, useClass: TranslateStore },

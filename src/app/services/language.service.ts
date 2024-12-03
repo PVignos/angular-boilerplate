@@ -1,31 +1,49 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LanguageService {
-  private preferredLanguage: string | null = null;
+  private languageSubject = new BehaviorSubject<string>('en');
+  language$ = this.languageSubject.asObservable();
 
-  constructor(private translate: TranslateService) {
-    this.initLanguage();
+  constructor(
+    private translate: TranslateService,
+    @Inject(PLATFORM_ID) private platformId: object // Inject platform ID for SSR check
+  ) {
+    const defaultLanguage = this.getDefaultLanguage();
+    this.setLanguage(defaultLanguage);
   }
 
-  initLanguage() {
-    // Usa la variabile locale o imposta la lingua di default
-    if (this.preferredLanguage) {
-      this.translate.use(this.preferredLanguage);
-    } else {
-      this.translate.use(this.translate.getDefaultLang());
+  setLanguage(lang: string): void {
+    this.languageSubject.next(lang); // Emit the new language value
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('language', lang);
     }
-  }
-
-  setLanguage(lang: string) {
-    this.preferredLanguage = lang; // Memorizza la lingua in una variabile locale
     this.translate.use(lang);
   }
 
   getCurrentLanguage(): string {
-    return this.translate.currentLang || this.translate.getDefaultLang();
+    return this.languageSubject.getValue();
+  }
+
+  private getDefaultLanguage(): string {
+    if (isPlatformBrowser(this.platformId)) {
+      const storedLanguage = localStorage.getItem('language');
+      const browserLanguage = this.getBrowserLanguage();
+      return storedLanguage || browserLanguage || 'en';
+    }
+    return 'en';
+  }
+
+  private getBrowserLanguage(): string | null {
+    if (isPlatformBrowser(this.platformId)) {
+      const browserLang = navigator.language.split('-')[0];
+      return ['en', 'it'].includes(browserLang) ? browserLang : null;
+    }
+    return null;
   }
 }

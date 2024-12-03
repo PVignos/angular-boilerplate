@@ -1,10 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './ui/header/header.component';
+import { HeaderComponent } from './components/header/header.component';
 import { Meta, Title } from '@angular/platform-browser';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
-import { LanguageService } from './services/language.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +12,6 @@ import { LanguageService } from './services/language.service';
   standalone: true,
 })
 export class AppComponent implements OnInit {
-  public currentLanguage = 'en';
   public title = 'San Francesco Lodge';
   public description = 'San Francesco Lodge description.';
   public keywords = 'Angular, SEO, JavaScript';
@@ -22,22 +20,11 @@ export class AppComponent implements OnInit {
 
   constructor(
     private meta: Meta,
-    private languageService: LanguageService,
-    private translateService: TranslateService,
     private titleService: Title
-  ) {
-    this.translateService.setDefaultLang('en');
-    this.translateService.use('en');
-  }
+  ) {}
 
   ngOnInit() {
-    this.currentLanguage = this.languageService.getCurrentLanguage();
     this.updateMetaTags();
-  }
-
-  switchLanguage(lang: string) {
-    this.languageService.setLanguage(lang);
-    this.currentLanguage = lang;
   }
 
   updateMetaTags() {

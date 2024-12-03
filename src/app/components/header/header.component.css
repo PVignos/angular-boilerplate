@@ -1,0 +1,57 @@
+button {
+  position: relative;
+  z-index: 99;
+}
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(31, 41, 55, 0.9);
+  z-index: 98;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease-in-out;
+  overflow-y: auto;
+}
+
+/* When the menu is open, we change the transform property to slide it into view */
+nav.open {
+  transform: translateY(0);
+}
+
+/* Mobile menu links */
+nav ul {
+  list-style: none;
+}
+
+nav a {
+  text-decoration: none;
+  padding: 10px;
+  font-size: 18px;
+  &.active {
+    @apply text-gray-50;
+    /*color: theme('colors.red.500');*/
+  }
+}
+
+/* For medium and larger screens, reset to the regular flex layout */
+@media (min-width: 768px) {
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Menu is hidden in desktop mode */
+  nav {
+    position: static;
+    width: auto;
+    height: auto;
+    background-color: transparent;
+    transform: none;
+  }
+}
