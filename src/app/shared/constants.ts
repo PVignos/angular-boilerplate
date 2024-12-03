@@ -1,4 +1,4 @@
-const LANGUAGES: {code: string, label: string}[] = [
+export const LANGUAGES: { code: string; label: string }[] = [
   {
     code: 'en',
     label: 'English',
@@ -8,5 +8,3 @@ const LANGUAGES: {code: string, label: string}[] = [
     label: 'Italiano',
   },
 ];
-
-export default LANGUAGES;

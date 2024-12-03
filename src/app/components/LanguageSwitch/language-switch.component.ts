@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { LanguageService } from '../../services/language.service';
-import Constants from '../../shared/constants';
 import { Subscription } from 'rxjs';
+import { LANGUAGES } from '../../shared/constants';
 
 @Component({
   selector: 'app-language-switch',
@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 export class LanguageSwitchComponent implements OnInit, OnDestroy {
   currentLanguage = 'en';
   isDropdownOpen = false;
+  languages = LANGUAGES;
   private languageSubscription!: Subscription;
 
   constructor(private languageService: LanguageService) {}
@@ -57,6 +58,4 @@ export class LanguageSwitchComponent implements OnInit, OnDestroy {
       this.isDropdownOpen = false; // Close the dropdown if the click is outside
     }
   }
-
-  protected readonly LANGUAGES = Constants;
 }

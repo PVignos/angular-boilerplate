@@ -13,7 +13,14 @@
       "path": "about-us",
       "title": "About Us",
       "description": "Description about us",
-      "keywords": "home, page, description",
+      "keywords": "about, page, description",
+      "image": "path/to/your/image.png"
+    },
+    "notFound": {
+      "path": "page-404",
+      "title": "Page not found",
+      "description": "Description page not found",
+      "keywords": "not found, 404, page, description",
       "image": "path/to/your/image.png"
     }
   }
