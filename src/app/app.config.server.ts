@@ -19,7 +19,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { provideServerRendering } from '@angular/platform-server';
 import { serverRoutes } from './app.routes.server';
 import { provideServerRoutesConfig } from '@angular/ssr';
-import { RouterModule } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -28,6 +28,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 export const appConfigServer: ApplicationConfig = {
   providers: [
+    provideServerRendering(),
     provideServerRoutesConfig(serverRoutes),
     provideHttpClient(withFetch()),
     provideStore({
@@ -41,11 +42,8 @@ export const appConfigServer: ApplicationConfig = {
     provideRouterStore(),
     UiFacade,
     provideClientHydration(withI18nSupport()),
-
-    provideServerRendering(),
-
+    provideRouter(routes),
     importProvidersFrom(
-      RouterModule.forRoot(routes),
       TranslateModule.forRoot({
         defaultLanguage: 'en',
         loader: {
@@ -58,3 +56,6 @@ export const appConfigServer: ApplicationConfig = {
     { provide: TranslateStore, useClass: TranslateStore },
   ],
 };
+
+console.log('>>> Server routes:', JSON.stringify(serverRoutes, null, 2));
+console.log('>>> Angular routes:', JSON.stringify(routes, null, 2));

@@ -92,16 +92,46 @@ export class LanguageService {
     return !!LANGUAGES.find(({ code }) => code === (lang || ''));
   }
 
-  private updateUrl(lang: string): void {
+  private async updateUrl(lang: string): Promise<void> {
     const urlSegments = this.router.url.split('/');
     if (urlSegments.length > 1) {
       const currentLang = urlSegments[1];
-
       if (currentLang === lang) {
         return;
       }
       urlSegments[1] = lang;
+
+      // Get the current page key
+      const currentPageKey = this.getCurrentPageKey(urlSegments);
+
+      if (currentPageKey) {
+        // Get the localized path for the current page
+        const localizedPath = await this.getLocalizedPath(lang, currentPageKey);
+        urlSegments[2] = localizedPath;
+      }
+
       this.router.navigateByUrl(urlSegments.join('/'), { replaceUrl: true });
     }
+  }
+
+  private getCurrentPageKey(urlSegments: string[]): string | null {
+    if (urlSegments.length <= 2) return 'index';
+    const currentPath = urlSegments[2];
+    // You might need to implement a reverse lookup here
+    // to find the page key based on the current path
+    // This is a simplified example
+    return (
+      Object.keys(this.translate.instant('pages')).find(
+        (key) => this.translate.instant(`pages.${key}.path`) === currentPath
+      ) || null
+    );
+  }
+
+  private async getLocalizedPath(
+    lang: string,
+    pageKey: string
+  ): Promise<string> {
+    await this.translate.use(lang).toPromise();
+    return this.translate.instant(`pages.${pageKey}.path`);
   }
 }
