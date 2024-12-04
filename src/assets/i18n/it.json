@@ -1,6 +1,4 @@
 {
-  "HELLO": "Ciao",
-  "WORLD": "Mondo",
   "pages": {
     "index": {
       "path": "",

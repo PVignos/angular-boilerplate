@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageSwitchComponent } from '../LanguageSwitch/language-switch.component';
 
 @Component({
@@ -16,17 +16,10 @@ import { LanguageSwitchComponent } from '../LanguageSwitch/language-switch.compo
   styleUrls: ['./header.component.css'],
   standalone: true,
 })
-export class HeaderComponent implements OnInit {
-  isActive = false;
+export class HeaderComponent {
   isMobileMenuOpen = false;
 
-  constructor(private router: Router) {}
-
-  ngOnInit() {
-    this.router.events.subscribe(() => {
-      this.isActive = this.router.url === '/about'; // Imposta isActive in base alla rotta
-    });
-  }
+  constructor(protected translate: TranslateService) {}
 
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;

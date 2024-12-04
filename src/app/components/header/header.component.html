@@ -62,7 +62,7 @@
       >
         <li>
           <a
-            routerLink="/about"
+            [routerLink]="['/', translate.currentLang, 'about']"
             routerLinkActive="active"
             class="block text-gray-300 hover:text-gray-100 transition"
           >
