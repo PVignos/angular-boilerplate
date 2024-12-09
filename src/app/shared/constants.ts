@@ -8,3 +8,8 @@ export const LANGUAGES: { code: string; label: string }[] = [
     label: 'Italiano',
   },
 ];
+
+export enum PAGES {
+  PAGE_HOME = 'index',
+  PAGE_ABOUT = 'about',
+}
