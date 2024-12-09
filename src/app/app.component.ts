@@ -12,8 +12,8 @@ import { CommonModule } from '@angular/common';
   standalone: true,
 })
 export class AppComponent implements OnInit {
-  public title = 'San Francesco Lodge';
-  public description = 'San Francesco Lodge description.';
+  public title = 'Villas Lodge';
+  public description = 'Villas description.';
   public keywords = 'Angular, SEO, JavaScript';
   public image = 'path/to/your/image.png';
   public router: Router = inject(Router);

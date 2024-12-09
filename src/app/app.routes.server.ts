@@ -1,25 +1,16 @@
-import { RenderMode, ServerRoute } from '@angular/ssr';
+import { PrerenderFallback, RenderMode, ServerRoute } from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
   {
-    path: '',
+    path: ':lang/:page',
     renderMode: RenderMode.Prerender,
-  },
-  {
-    path: 'en',
-    renderMode: RenderMode.Prerender,
-  },
-  {
-    path: 'it',
-    renderMode: RenderMode.Prerender,
-  },
-  {
-    path: 'en/:page',
-    renderMode: RenderMode.Prerender,
-  },
-  {
-    path: 'it/:page',
-    renderMode: RenderMode.Prerender,
+    fallback: PrerenderFallback.Server,
+    async getPrerenderParams() {
+      return [
+        { lang: 'en', page: 'about' },
+        { lang: 'it', page: 'about' },
+      ];
+    },
   },
   {
     path: '**',

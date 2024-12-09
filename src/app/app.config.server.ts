@@ -57,5 +57,5 @@ export const appConfigServer: ApplicationConfig = {
   ],
 };
 
-console.log('>>> Server routes:', JSON.stringify(serverRoutes, null, 2));
-console.log('>>> Angular routes:', JSON.stringify(routes, null, 2));
+// console.log('>>> Server routes:', JSON.stringify(serverRoutes, null, 2));
+// console.log('>>> Angular routes:', JSON.stringify(routes, null, 2));

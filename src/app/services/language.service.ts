@@ -1,8 +1,8 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
-import { Router, NavigationEnd } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { LANGUAGES } from '../shared/constants';
 
@@ -49,7 +49,6 @@ export class LanguageService {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('language', lang);
     }
-
     this.translate.use(lang);
 
     if (updateUrl) {
@@ -88,7 +87,7 @@ export class LanguageService {
     return lang && this.isSupportedLanguage(lang) ? lang : null;
   }
 
-  private isSupportedLanguage(lang: string | null): boolean {
+  public isSupportedLanguage(lang: string | null): boolean {
     return !!LANGUAGES.find(({ code }) => code === (lang || ''));
   }
 
@@ -106,8 +105,7 @@ export class LanguageService {
 
       if (currentPageKey) {
         // Get the localized path for the current page
-        const localizedPath = await this.getLocalizedPath(lang, currentPageKey);
-        urlSegments[2] = localizedPath;
+        urlSegments[2] = await this.getLocalizedPath(lang, currentPageKey);
       }
 
       this.router.navigateByUrl(urlSegments.join('/'), { replaceUrl: true });
