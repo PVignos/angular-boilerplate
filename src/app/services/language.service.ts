@@ -1,7 +1,7 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
-import { isPlatformBrowser } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { LANGUAGES } from '../shared/constants';
@@ -17,7 +17,8 @@ export class LanguageService {
   constructor(
     private translate: TranslateService,
     private router: Router,
-    @Inject(PLATFORM_ID) private platformId: object
+    @Inject(PLATFORM_ID) private platformId: object,
+    @Inject(DOCUMENT) private document: Document
   ) {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
@@ -38,6 +39,19 @@ export class LanguageService {
           }
         }
       });
+
+    if (isPlatformBrowser(this.platformId)) {
+      document.documentElement.lang = this.translate.currentLang || 'en';
+
+      this.translate.onLangChange.subscribe((event) => {
+        document.documentElement.lang = event.lang;
+      });
+    }
+
+    if (isPlatformServer(this.platformId)) {
+      const defaultLang = this.translate.currentLang || 'en';
+      this.translate.setDefaultLang(defaultLang);
+    }
   }
 
   setLanguage(lang: string, updateUrl = true): void {
@@ -49,6 +63,7 @@ export class LanguageService {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('language', lang);
     }
+    this.document.documentElement.lang = lang;
     this.translate.use(lang);
 
     if (updateUrl) {
