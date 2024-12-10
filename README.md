@@ -22,3 +22,20 @@ A pre-configured starter template for building modern, scalable, and high-perfor
 - **Development Utilities**
   - Hot Module Reloading (HMR) for faster development cycles.
   - Ready-to-use configuration for CI/CD pipelines.
+
+---
+
+## 💡 Work in Progress
+
+### SEO URL
+- [ ] Research and determine the best practices for implementing SEO-friendly URLs based on translations. For example: `en/about-us`, `it/chi-siamo`.
+- [ ] Implement canonical URLs to avoid duplicate content issues.
+- [ ] Add `Hreflang` tags to indicate language and regional targeting.
+
+### Redirect Issues
+- [ ] Ensure that accessing `http://localhost:4200/dsaasd` displays a *Page not found* message without performing a redirect.
+- [ ] Ensure that accessing `http://localhost:4200/it/dsaasd` displays a *Page not found* message without performing a redirect.
+
+### Automatic Prerendering of Routes
+- [ ] Explore solutions for generating prerendered routes automatically, possibly using Node.js and `app.routes.ts` for route extraction.
+
