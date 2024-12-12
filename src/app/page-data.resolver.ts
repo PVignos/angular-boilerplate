@@ -32,6 +32,7 @@ export const pageDataResolver = async (
   }
 
   try {
+    await urlTranslationService.ensureTranslationsLoaded();
     await firstValueFrom(translate.use(lang));
     const originalPage = await urlTranslationService.getOriginalPage(
       translatedPage,

@@ -12,6 +12,7 @@ import {
   TranslateModule,
   TranslateLoader,
   TranslateStore,
+  TranslateService,
 } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { provideServerRendering } from '@angular/platform-server';
@@ -19,6 +20,8 @@ import { serverRoutes } from './app.routes.server';
 import { provideServerRoutesConfig } from '@angular/ssr';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
+import { UrlTranslationService } from './services/url-translation.service';
+import { LANGUAGES } from './shared/constants';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -50,6 +53,24 @@ export const appConfigServer: ApplicationConfig = {
       })
     ),
     { provide: TranslateStore, useClass: TranslateStore },
+    {
+      provide: 'TRANSLATIONS_INITIALIZER',
+      useFactory:
+        (
+          urlTranslationService: UrlTranslationService,
+          translateService: TranslateService
+        ) =>
+        async () => {
+          await urlTranslationService.ensureTranslationsLoaded();
+          await Promise.all(
+            LANGUAGES.map((lang) =>
+              translateService.getTranslation(lang.code).toPromise()
+            )
+          );
+        },
+      deps: [UrlTranslationService, TranslateService],
+      multi: true,
+    },
   ],
 };
 

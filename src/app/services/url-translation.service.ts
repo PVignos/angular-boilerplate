@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { LANGUAGES } from '../shared/constants';
 import { LanguageService } from './language.service';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,32 +10,42 @@ import { LanguageService } from './language.service';
 export class UrlTranslationService {
   private urlTranslations: Record<string, Record<string, { path: string }>> =
     {};
+  private initializationPromise: Promise<void> | null = null;
 
   constructor(
     private translate: TranslateService,
     private languageService: LanguageService
-  ) {
-    this.initializeUrlTranslations();
-  }
+  ) {}
 
   private async initializeUrlTranslations() {
-    for (const lang of LANGUAGES) {
-      const translations = await this.translate
-        .getTranslation(lang.code)
-        .toPromise();
-      this.urlTranslations[lang.code] = translations?.['pages'] || {};
+    if (!this.initializationPromise) {
+      this.initializationPromise = (async () => {
+        for (const lang of LANGUAGES) {
+          const translations = await firstValueFrom(
+            this.translate.getTranslation(lang.code)
+          );
+          this.urlTranslations[lang.code] = translations?.['pages'] || {};
+        }
+      })();
     }
+    return this.initializationPromise;
   }
 
   async ensureTranslationsLoaded(): Promise<void> {
-    if (Object.keys(this.urlTranslations).length === 0) {
-      await this.initializeUrlTranslations();
-    }
+    await this.initializeUrlTranslations();
+  }
+
+  async getTranslatedPath(originalPath: string): Promise<string> {
+    const currentLang = this.translate.currentLang;
+    const translatedPath = await this.getTranslatedUrl(
+      originalPath,
+      currentLang
+    );
+    return `/${currentLang}/${translatedPath}`;
   }
 
   async getTranslatedUrl(page: string, lang: string): Promise<string> {
     await this.ensureTranslationsLoaded();
-
     const pageData = this.urlTranslations[lang]?.[page];
     return pageData?.path || page;
   }
