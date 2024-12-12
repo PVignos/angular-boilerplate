@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { SeoService } from '../../services/seo.service';
 import { COMPONENT_PAGE_MAP, ComponentPageType } from '../../shared/constants';
+import { UrlTranslationService } from '../../services/url-translation.service';
 
 @Component({
   selector: 'app-dynamic-page',
@@ -22,13 +23,19 @@ export class DynamicPageComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private seoService: SeoService
+    private seoService: SeoService,
+    private urlTranslationService: UrlTranslationService
   ) {}
 
-  ngOnInit() {
-    this.route.data.subscribe((data) => {
+  async ngOnInit() {
+    this.route.data.subscribe(async (data) => {
       const { pageData } = data;
-      this.seoService.setSeoData(pageData.page);
+      const lang = this.route.snapshot.params['lang'];
+      const translatedUrl = await this.urlTranslationService.getTranslatedUrl(
+        pageData.page,
+        lang
+      );
+      this.seoService.setSeoData(pageData.page, translatedUrl);
       this.pageComponent = COMPONENT_PAGE_MAP[pageData.page] || null;
     });
   }

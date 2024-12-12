@@ -9,8 +9,6 @@ import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
-import { uiReducer } from './store/ui-store/ui.reducer';
-import { UiFacade } from './store/ui-store/ui.facade';
 import {
   provideClientHydration,
   withI18nSupport,
@@ -34,7 +32,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideStore({
       router: routerReducer,
-      ui: uiReducer,
     }),
     provideStoreDevtools({
       trace: false,
@@ -42,7 +39,6 @@ export const appConfig: ApplicationConfig = {
     }),
     provideHttpClient(),
     provideRouterStore(),
-    UiFacade,
     provideClientHydration(withI18nSupport()),
     importProvidersFrom(
       TranslateModule.forRoot({

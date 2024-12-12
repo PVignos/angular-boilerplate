@@ -28,7 +28,7 @@ export const routes: Routes = [
           import('./pages/home/home.component').then((m) => m.HomeComponent),
       },
       {
-        path: ':page',
+        path: ':translatedPage',
         canActivateChild: [PageGuard],
         resolve: {
           pageData: pageDataResolver,
