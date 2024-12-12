@@ -35,19 +35,16 @@ export class UrlTranslationService {
     await this.initializeUrlTranslations();
   }
 
-  async getTranslatedPath(originalPath: string): Promise<string> {
-    const currentLang = this.translate.currentLang;
-    const translatedPath = await this.getTranslatedUrl(
-      originalPath,
-      currentLang
-    );
-    return `/${currentLang}/${translatedPath}`;
-  }
-
-  async getTranslatedUrl(page: string, lang: string): Promise<string> {
+  async getTranslatedUrl(
+    page: string,
+    lang: string,
+    withLang = false
+  ): Promise<string> {
     await this.ensureTranslationsLoaded();
     const pageData = this.urlTranslations[lang]?.[page];
-    return pageData?.path || page;
+    return withLang
+      ? `/${lang}/${pageData?.path || page}`
+      : pageData?.path || page;
   }
 
   async getOriginalPage(translatedUrl: string, lang?: string): Promise<string> {
