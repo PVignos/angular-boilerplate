@@ -10,6 +10,4 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './not-found.component.html',
   standalone: true,
 })
-export class NotFoundComponent {
-  constructor() {}
-}
+export class NotFoundComponent {}
