@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { LanguageSwitchComponent } from '../LanguageSwitch/language-switch.component';
+import { LanguageSwitchComponent } from '../languageSwitch/language-switch.component';
 
 @Component({
   selector: 'app-header',

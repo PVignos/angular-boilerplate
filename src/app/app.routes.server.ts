@@ -1,5 +1,5 @@
 import { PrerenderFallback, RenderMode, ServerRoute } from '@angular/ssr';
-import { LANGUAGES, PAGES } from './shared/constants';
+import { COMPONENT_PAGE_MAP, LANGUAGES } from './shared/constants';
 
 export const serverRoutes: ServerRoute[] = [
   {
@@ -8,7 +8,7 @@ export const serverRoutes: ServerRoute[] = [
     fallback: PrerenderFallback.Server,
     async getPrerenderParams() {
       return LANGUAGES.flatMap((language) =>
-        Object.values(PAGES)
+        Object.keys(COMPONENT_PAGE_MAP)
           .filter((page) => page !== 'index')
           .map((page) => ({
             lang: language.code,

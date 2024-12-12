@@ -1,11 +1,9 @@
-import { Component, OnInit, Type } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { SeoService } from '../../services/seo.service';
-import { HomeComponent } from '../home/home.component';
-import { AboutComponent } from '../about/about.component';
+import { COMPONENT_PAGE_MAP, ComponentPageType } from '../../shared/constants';
 
 @Component({
   selector: 'app-dynamic-page',
@@ -20,15 +18,10 @@ import { AboutComponent } from '../about/about.component';
   `,
 })
 export class DynamicPageComponent implements OnInit {
-  pageComponent: Type<HomeComponent | AboutComponent> | null = null;
-  componentMap: Record<string, Type<HomeComponent | AboutComponent>> = {
-    home: HomeComponent,
-    about: AboutComponent,
-  };
+  pageComponent: ComponentPageType | null = null;
 
   constructor(
     private route: ActivatedRoute,
-    private translate: TranslateService,
     private seoService: SeoService
   ) {}
 
@@ -36,7 +29,7 @@ export class DynamicPageComponent implements OnInit {
     this.route.data.subscribe((data) => {
       const { pageData } = data;
       this.seoService.setSeoData(pageData.page);
-      this.pageComponent = this.componentMap[pageData.page] || null;
+      this.pageComponent = COMPONENT_PAGE_MAP[pageData.page] || null;
     });
   }
 }
