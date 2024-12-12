@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { LanguageService } from './services/language.service';
+import { COMPONENT_PAGE_MAP } from './shared/constants';
 
 export interface PageData {
   page: string;
@@ -26,6 +27,10 @@ export const pageDataResolver = async (
 
   if (!page) {
     return Promise.reject('No page provided');
+  }
+
+  if (!COMPONENT_PAGE_MAP[page]) {
+    return Promise.reject('Page not initialised');
   }
 
   try {

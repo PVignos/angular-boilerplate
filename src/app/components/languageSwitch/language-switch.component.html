@@ -29,7 +29,6 @@
     >
       @for (lang of languages; track lang) {
         <li
-          role="button"
           tabindex="0"
           (click)="switchLanguage(lang.code)"
           (keydown)="onKeyDown($event, lang.code)"
