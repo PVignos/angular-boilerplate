@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageSwitchComponent } from '../languageSwitch/language-switch.component';
+import { UrlTranslationService } from '../../services/url-translation.service';
 
 @Component({
   selector: 'app-header',
@@ -16,10 +17,38 @@ import { LanguageSwitchComponent } from '../languageSwitch/language-switch.compo
   styleUrls: ['./header.component.css'],
   standalone: true,
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   isMobileMenuOpen = false;
+  translatedRoutes: {
+    home: string;
+    about: string;
+  } = {
+    home: '',
+    about: '',
+  };
 
-  constructor(protected translate: TranslateService) {}
+  constructor(
+    private urlTranslationService: UrlTranslationService,
+    protected translate: TranslateService
+  ) {}
+
+  async ngOnInit() {
+    await this.updateTranslatedRoutes();
+    this.translate.onLangChange.subscribe(async () => {
+      await this.updateTranslatedRoutes();
+    });
+  }
+
+  async updateTranslatedRoutes() {
+    this.translatedRoutes = {
+      home: await this.urlTranslationService.getTranslatedUrl({
+        page: 'index',
+      }),
+      about: await this.urlTranslationService.getTranslatedUrl({
+        page: 'about',
+      }),
+    };
+  }
 
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;

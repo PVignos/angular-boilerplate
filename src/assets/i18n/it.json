@@ -13,7 +13,7 @@
       "image": "path/to/your/image.png"
     },
     "notFound": {
-      "path": "pagina-404",
+      "path": "pagina-non-trovata",
       "title": "Pagina non trovata",
       "description": "Descrizione pagina non trovata",
       "image": "path/to/your/image.png"

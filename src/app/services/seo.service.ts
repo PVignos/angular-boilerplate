@@ -19,7 +19,7 @@ export class SeoService {
   /**
    * Sets basic SEO data like title, description, canonical URL, and social tags.
    */
-  setSeoData(pageKey: string, translatedUrl?: string): void {
+  setSeoData(pageKey: string, translatedUrl: string): void {
     const currentLang = this.translateService.currentLang;
 
     this.translateService
@@ -44,11 +44,11 @@ export class SeoService {
         // Set canonical URL
         this.metaService.updateTag({
           rel: 'canonical',
-          href: `${environment.apiUrl}/${currentLang}/${translatedUrl || pageKey}`,
+          href: `${environment.apiUrl}/${currentLang}${translatedUrl}`,
         });
 
         // Set hreflang tags
-        this.setAlternateHrefLang(translatedUrl || pageKey, currentLang);
+        this.setAlternateHrefLang(translatedUrl, currentLang);
 
         // Set social tags
         this.setSocialTags(
@@ -85,24 +85,27 @@ export class SeoService {
   ): Promise<void> {
     const supportedLangs = this.translateService.getLangs();
 
-    const originalPage = await this.urlTranslationService.getOriginalPage(
-      translatedUrl,
-      currentLang
-    );
+    const originalPage =
+      (await this.urlTranslationService.getOriginalPage({
+        translatedUrl,
+        lang: currentLang,
+      })) || 'index';
     const alternatesUrl = await Promise.all(
-      supportedLangs.flatMap(async (language) => {
+      supportedLangs.flatMap(async (lang) => {
         const translatedUrl = await this.urlTranslationService.getTranslatedUrl(
-          originalPage,
-          language
+          {
+            page: originalPage,
+            lang,
+          }
         );
         return {
-          lang: language,
+          lang: lang,
           translatedPage: translatedUrl,
         };
       })
     );
     for (const { lang, translatedPage } of alternatesUrl) {
-      const hreflangUrl = `${environment.apiUrl}/${lang}/${translatedPage}`;
+      const hreflangUrl = `${environment.apiUrl}${translatedPage}`;
       this.metaService.updateTag({
         rel: 'alternate',
         hreflang: lang,

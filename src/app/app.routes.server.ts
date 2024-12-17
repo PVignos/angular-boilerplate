@@ -10,7 +10,7 @@ export const serverRoutes: ServerRoute[] = [
     fallback: PrerenderFallback.Server,
     async getPrerenderParams() {
       const urlTranslationService = inject(UrlTranslationService);
-      await urlTranslationService.ensureTranslationsLoaded();
+      await urlTranslationService.initializeUrlTranslations();
 
       const params = await Promise.all(
         LANGUAGES.flatMap(async (language) => {
@@ -18,10 +18,11 @@ export const serverRoutes: ServerRoute[] = [
             .filter((page) => page !== 'index')
             .map(async (page) => {
               const translatedUrl =
-                await urlTranslationService.getTranslatedUrl(
+                await urlTranslationService.getTranslatedUrl({
                   page,
-                  language.code
-                );
+                  lang: language.code,
+                  withLang: false,
+                });
               return {
                 lang: language.code,
                 translatedPage: translatedUrl,

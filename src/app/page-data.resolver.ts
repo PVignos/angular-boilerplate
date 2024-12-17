@@ -18,7 +18,7 @@ export const pageDataResolver = async (
   route: ActivatedRouteSnapshot
 ): Promise<PageData> => {
   const lang = route.params['lang'];
-  const translatedPage = route.params['translatedPage'];
+  const translatedPage = route.params['translatedPage'] || 'index';
   const translate = inject(TranslateService);
   const languageService = inject(LanguageService);
   const urlTranslationService = inject(UrlTranslationService);
@@ -32,12 +32,12 @@ export const pageDataResolver = async (
   }
 
   try {
-    await urlTranslationService.ensureTranslationsLoaded();
+    await urlTranslationService.initializeUrlTranslations();
     await firstValueFrom(translate.use(lang));
-    const originalPage = await urlTranslationService.getOriginalPage(
-      translatedPage,
-      lang
-    );
+    const originalPage = await urlTranslationService.getOriginalPage({
+      translatedUrl: translatedPage,
+      lang,
+    });
 
     if (!COMPONENT_PAGE_MAP[originalPage]) {
       return Promise.reject('Page not initialised');

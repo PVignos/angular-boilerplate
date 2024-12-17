@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between">
       <!-- Logo -->
       <a
-        [routerLink]="['/', translate.currentLang]"
+        [routerLink]="translatedRoutes.home"
         class="text-2xl font-bold flex items-center"
       >
         <svg
@@ -65,7 +65,7 @@
       >
         <li>
           <a
-            [routerLink]="['/', translate.currentLang, 'about']"
+            [routerLink]="translatedRoutes.about"
             routerLinkActive="active"
             class="block text-gray-300 hover:text-gray-100 transition"
           >

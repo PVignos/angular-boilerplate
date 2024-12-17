@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { LanguageService } from '../../services/language.service';
 import { Subscription } from 'rxjs';
 import { LANGUAGES } from '../../shared/constants';
+import { UrlTranslationService } from '../../services/url-translation.service';
 
 @Component({
   selector: 'app-language-switch',
@@ -14,7 +15,10 @@ export class LanguageSwitchComponent implements OnInit, OnDestroy {
   languages = LANGUAGES;
   private languageSubscription!: Subscription;
 
-  constructor(private languageService: LanguageService) {}
+  constructor(
+    private languageService: LanguageService,
+    private urlTranslationService: UrlTranslationService
+  ) {}
 
   ngOnInit() {
     this.languageSubscription = this.languageService.language$.subscribe(
@@ -34,8 +38,8 @@ export class LanguageSwitchComponent implements OnInit, OnDestroy {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  switchLanguage(lang: string): void {
-    this.languageService.setLanguage(lang);
+  async switchLanguageTo(lang: string) {
+    await this.urlTranslationService.switchLanguageAndNavigate(lang);
     this.isDropdownOpen = false;
   }
 
@@ -47,7 +51,7 @@ export class LanguageSwitchComponent implements OnInit, OnDestroy {
     const keyboardEvent = event as KeyboardEvent;
     if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') {
       event.preventDefault();
-      this.switchLanguage(lang);
+      this.switchLanguageTo(lang);
     }
   }
 

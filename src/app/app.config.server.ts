@@ -61,7 +61,7 @@ export const appConfigServer: ApplicationConfig = {
           translateService: TranslateService
         ) =>
         async () => {
-          await urlTranslationService.ensureTranslationsLoaded();
+          await urlTranslationService.initializeUrlTranslations();
           await Promise.all(
             LANGUAGES.map((lang) =>
               translateService.getTranslation(lang.code).toPromise()

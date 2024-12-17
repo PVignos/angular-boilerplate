@@ -25,12 +25,7 @@ A pre-configured starter template for building modern, scalable, and high-perfor
 
 ---
 
-## 💡 Work in Progress
-
-### SEO URL
-- [ ] Research and determine the best practices for implementing SEO-friendly URLs based on translations. For example: `en/about-us`, `it/chi-siamo`.
-- [ ] Implement canonical URLs to avoid duplicate content issues.
-- [ ] Add `Hreflang` tags to indicate language and regional targeting.
+## 💡 Work in Progress - Missing part
 
 ### Redirect Issues
 - [ ] Ensure that accessing `http://localhost:4200/dsaasd` displays a *Page not found* message without performing a redirect.

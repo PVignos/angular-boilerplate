@@ -30,7 +30,7 @@
       @for (lang of languages; track lang) {
         <li
           tabindex="0"
-          (click)="switchLanguage(lang.code)"
+          (click)="switchLanguageTo(lang.code)"
           (keydown)="onKeyDown($event, lang.code)"
           class="flex items-center space-x-2 px-2 py-2 cursor-pointer hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >

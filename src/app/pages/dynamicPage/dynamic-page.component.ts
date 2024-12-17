@@ -31,10 +31,11 @@ export class DynamicPageComponent implements OnInit {
     this.route.data.subscribe(async (data) => {
       const { pageData } = data;
       const lang = this.route.snapshot.params['lang'];
-      const translatedUrl = await this.urlTranslationService.getTranslatedUrl(
-        pageData.page,
-        lang
-      );
+      const translatedUrl = await this.urlTranslationService.getTranslatedUrl({
+        page: pageData.page,
+        lang,
+        withLang: false,
+      });
       this.seoService.setSeoData(pageData.page, translatedUrl);
       this.pageComponent = COMPONENT_PAGE_MAP[pageData.page] || null;
     });

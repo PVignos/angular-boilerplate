@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { LANGUAGES } from '../shared/constants';
 import { LanguageService } from './language.service';
 import { firstValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -14,10 +15,11 @@ export class UrlTranslationService {
 
   constructor(
     private translate: TranslateService,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private router: Router
   ) {}
 
-  private async initializeUrlTranslations() {
+  public async initializeUrlTranslations() {
     if (!this.initializationPromise) {
       this.initializationPromise = (async () => {
         for (const lang of LANGUAGES) {
@@ -31,29 +33,63 @@ export class UrlTranslationService {
     return this.initializationPromise;
   }
 
-  async ensureTranslationsLoaded(): Promise<void> {
+  async getTranslatedUrl({
+    page,
+    lang,
+    withLang = true,
+  }: {
+    page: string;
+    lang?: string;
+    withLang?: boolean;
+  }): Promise<string> {
     await this.initializeUrlTranslations();
+
+    lang = lang || this.translate.currentLang;
+    const pageData = this.urlTranslations[lang]?.[page || 'index'];
+    const path = pageData?.path ? `/${pageData.path}` : '';
+    return withLang ? `/${lang}${path}` : `${path}`;
   }
 
-  async getTranslatedUrl(
-    page: string,
-    lang: string,
-    withLang = false
-  ): Promise<string> {
-    await this.ensureTranslationsLoaded();
-    const pageData = this.urlTranslations[lang]?.[page];
-    return withLang
-      ? `/${lang}/${pageData?.path || page}`
-      : pageData?.path || page;
+  async switchLanguageAndNavigate(newLang: string): Promise<void> {
+    await this.initializeUrlTranslations();
+
+    const currentLang = this.translate.currentLang;
+    const currentUrl = this.router.url;
+
+    const originalPage = await this.getOriginalPage({
+      translatedUrl: this.stripLanguageFromUrl(currentUrl, currentLang),
+      lang: currentLang,
+    });
+
+    const newTranslatedUrl = await this.getTranslatedUrl({
+      page: originalPage,
+      lang: newLang,
+    });
+
+    this.translate.use(newLang);
+
+    this.router.navigateByUrl(newTranslatedUrl);
   }
 
-  async getOriginalPage(translatedUrl: string, lang?: string): Promise<string> {
-    await this.ensureTranslationsLoaded();
-    if (!lang) {
-      lang = this.languageService.getCurrentLanguage();
-    }
+  async getOriginalPage({
+    translatedUrl,
+    lang = this.languageService.getCurrentLanguage(),
+  }: {
+    translatedUrl: string;
+    lang?: string;
+  }): Promise<string> {
+    await this.initializeUrlTranslations();
     const entries = Object.entries(this.urlTranslations[lang] || {});
-    const found = entries.find(([_, value]) => value.path === translatedUrl);
+    const found = entries.find(
+      ([_, value]) =>
+        value.path === translatedUrl ||
+        value.path === translatedUrl.replace(/\//g, '')
+    );
     return found ? found[0] : '';
+  }
+
+  private stripLanguageFromUrl(url: string, lang: string): string {
+    const langPrefix = `/${lang}/`;
+    return url.startsWith(langPrefix) ? url.slice(langPrefix.length) : url;
   }
 }

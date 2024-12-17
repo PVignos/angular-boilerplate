@@ -15,7 +15,7 @@
       "image": "path/to/your/image.png"
     },
     "notFound": {
-      "path": "page-404",
+      "path": "not-found",
       "title": "Page not found",
       "description": "Description page not found",
       "keywords": "not found, 404, page, description",
